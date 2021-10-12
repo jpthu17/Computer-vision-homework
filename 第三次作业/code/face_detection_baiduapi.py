@@ -4,11 +4,12 @@ import base64
 import math
 
 
+# ------------------这是我申请的api------------------------
 APP_ID = '24967392'
 API_KEY = "Qu71W4CQHT0ocj3xWCD90aEV"
 SECRET_KEY = "xeRQG52AwwWHcZLbqvo3G9DLiWDSyfS3"
 aipFace = AipFace(APP_ID, API_KEY, SECRET_KEY)
-
+#---------------------------------------------------------
 
 def face(img):
     image = img

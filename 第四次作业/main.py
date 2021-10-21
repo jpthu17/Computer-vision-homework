@@ -8,49 +8,27 @@ def get_f(x, y, w):
 
 
 def varepsilon(x):
-    if x > 0:
-        return 1
-    elif x == 0:
-        return 0.5
-    else:
-        return 0
+    result = torch.zeros_like(x)
+    result[x > 0] = 1
+    result[x == 0] = 0.5
+    return result
 
 
 def get_fx(x, y, w):
-    result = torch.zeros_like(x)
     relu = torch.nn.ReLU()
-    I, J = y.size()
-    _, K = x.size()
-
-    for i in range(I):
-        for k in range(K):
-            for j in range(J):
-                result[i,k] += 2*(relu(x @ w) - y)[i,j]*varepsilon((x @ w)[i,j])*w[k,j]
+    result = 2 * (relu(x @ w) - y) * varepsilon(x @ w) @ w.t()
     return result
 
 
 def get_fy(x, y, w):
-    result = torch.zeros_like(y)
     relu = torch.nn.ReLU()
-    I, J = y.size()
-    _, K = x.size()
-
-    for i in range(I):
-        for j in range(J):
-            result[i, j] = -2 * (relu(x @ w) - y)[i, j]
+    result = -2 * (relu(x @ w) - y)
     return result
 
 
 def get_fw(x, y, w):
-    result = torch.zeros_like(w)
     relu = torch.nn.ReLU()
-    I, J = y.size()
-    _, K = x.size()
-
-    for k in range(K):
-        for j in range(J):
-            for i in range(I):
-                result[k, j] += 2 * (relu(x @ w) - y)[i, j] * varepsilon((x @ w)[i, j]) * x[i, k]
+    result = 2 * x.t() @ ((relu(x @ w) - y) * varepsilon(x @ w))
     return result
 
 
